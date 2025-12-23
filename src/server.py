@@ -273,7 +273,7 @@ class ExtProcServicer(ep_grpc.ExternalProcessorServicer):
 async def serve(host: str = "0.0.0.0", port: int = 50052):
     await manager.initialize()
     logger.info(manager.config)
-    logger.info(f"Loaded {manager.plugin_count} plugins")
+    logger.debug(f"Loaded {manager.plugin_count} plugins")
 
     server = grpc.aio.server()
     # server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
