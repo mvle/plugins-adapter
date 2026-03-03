@@ -14,11 +14,6 @@ spec:
         app: nemo-guardrails
     spec:
       containers:
-      - name: llm-proxy
-        image: localhost/llm-proxy:0.1.0
-        envFrom:
-        - secretRef:
-            name: rits-api-key
       - name: nemo-guardrails
         # Note: Specific tags can be found at https://quay.io/repository/opendatahub/odh-trustyai-nemo-guardrails-server?tab=tags
         image: quay.io/opendatahub/odh-trustyai-nemo-guardrails-server:latest

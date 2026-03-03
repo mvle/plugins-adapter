@@ -5,7 +5,6 @@ This directory contains the core `NemoCheck` plugin implementation used by both 
 ## Prerequisites: NeMo Guardrails Server
  * The NeMo Guardrails server must provide the `/v1/guardrail/checks` endpoint for this plugin to function.
  * Refer to the [original repo](https://github.com/m-misiura/demos/tree/main/nemo_openshift/guardrail-checks/deployment) for full instructions.
- * Instructions are adapted for the `mcp-gateway` kind cluster to work with an LLM proxy routing to an OpenAI-compatible backend below:
 
 ```bash
 docker pull quay.io/opendatahub/odh-trustyai-nemo-guardrails-server:latest
