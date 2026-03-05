@@ -40,9 +40,6 @@ jobs:
             echo ""
             echo "Detailed changes:"
             git diff --stat
-            echo ""
-            echo "Full diff:"
-            git diff
             exit 1
           }
 

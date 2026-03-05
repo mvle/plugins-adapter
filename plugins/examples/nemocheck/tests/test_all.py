@@ -3,12 +3,11 @@
 
 # Standard
 import asyncio
+from enum import Enum
+from typing import Any, Dict, List, Literal, Optional, Union
 
 # Third-Party
 import pytest
-from enum import Enum
-from typing import Any, Dict, List, Literal, Optional, Union
-from pydantic import BaseModel, Field
 
 # First-Party
 # from mcpgateway.common.models import Message, PromptResult, Role, TextContent
@@ -21,6 +20,7 @@ from cpex.framework import (
     ToolHookType,
     ToolPostInvokePayload,
 )
+from pydantic import BaseModel, Field
 
 
 ##----- Temporary classes from contextforge-plugins-framework/tests/unit/cpex/fixtures/common/models.py ##

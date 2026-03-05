@@ -7,23 +7,22 @@ from typing import AsyncIterator
 
 import grpc
 
+# First-Party
+from cpex.framework import (
+    PluginManager,
+    PromptHookType,
+    PromptPrehookPayload,
+    ToolHookType,
+    ToolPostInvokePayload,
+    ToolPreInvokePayload,
+)
+from cpex.framework.models import GlobalContext
+
 # Third-Party
 from envoy.config.core.v3 import base_pb2 as core
 from envoy.service.ext_proc.v3 import external_processor_pb2 as ep
 from envoy.service.ext_proc.v3 import external_processor_pb2_grpc as ep_grpc
 from envoy.type.v3 import http_status_pb2 as http_status_pb2
-
-# First-Party
-from cpex.framework import (
-    PluginManager,
-    ToolHookType,
-    PromptHookType,
-    PromptPrehookPayload,
-    ToolPostInvokePayload,
-    ToolPreInvokePayload,
-)
-
-from cpex.framework.models import GlobalContext
 
 # ============================================================================
 # LOGGING CONFIGURATION
@@ -105,9 +104,7 @@ def create_mcp_immediate_error_response(body, error_message, violation=None):
 # ============================================================================
 def get_modified_response(body) -> ep.BodyResponse:
     return ep.BodyResponse(
-        response=ep.CommonResponse(
-            body_mutation=ep.BodyMutation(body=json.dumps(body).encode("utf-8"))
-        )
+        response=ep.CommonResponse(body_mutation=ep.BodyMutation(body=json.dumps(body).encode("utf-8")))
     )
 
 
@@ -147,13 +144,7 @@ async def getToolPreInvokeResponse(body):
         body_mutation = ep.BodyResponse(response=ep.CommonResponse())
         if result_payload is not None and result_payload.args is not None:
             body["params"]["arguments"] = result_payload.args["tool_args"]
-<<<<<<< HEAD
             body_mutation = get_modified_response(body)
-=======
-            body_mutation = ep.BodyResponse(
-                response=ep.CommonResponse(body_mutation=ep.BodyMutation(body=json.dumps(body).encode("utf-8")))
-            )
->>>>>>> 3d96cab (:recycle: Use line limit 120)
         else:
             logger.debug("No change in tool args")
         body_resp = ep.ProcessingResponse(request_body=body_mutation)
@@ -214,21 +205,10 @@ async def getPromptPreFetchResponse(body):
     Invokes plugins before a prompt is fetched, allowing for argument validation,
     modification, or blocking of the prompt request.
     """
-<<<<<<< HEAD
-    prompt = PromptPrehookPayload(
-        prompt_id=body["params"]["name"], args=body["params"]["arguments"]
-    )
+    prompt = PromptPrehookPayload(prompt_id=body["params"]["name"], args=body["params"]["arguments"])
     # TODO: hard-coded ids
     global_context = GlobalContext(request_id="1", server_id="2")
-    result, _ = await manager.invoke_hook(
-        PromptHookType.PROMPT_PRE_FETCH, prompt, global_context=global_context
-    )
-=======
-    prompt = PromptPrehookPayload(name=body["params"]["name"], args=body["params"]["arguments"])
-    # TODO: hard-coded ids
-    global_context = GlobalContext(request_id="1", server_id="2")
-    result, _ = await manager.invoke_hook(ToolHookType.PROMPT_PRE_FETCH, prompt, global_context=global_context)
->>>>>>> 3d96cab (:recycle: Use line limit 120)
+    result, _ = await manager.invoke_hook(PromptHookType.PROMPT_PRE_FETCH, prompt, global_context=global_context)
     logger.info(result)
     if not result.continue_processing:
         body_resp = create_mcp_immediate_error_response(
@@ -237,7 +217,6 @@ async def getPromptPreFetchResponse(body):
             violation=result.violation,
         )
     else:
-<<<<<<< HEAD
         result_payload = result.modified_payload
         body_mutation = ep.BodyResponse(response=ep.CommonResponse())
         if result_payload is not None and result_payload.args is not None:
@@ -248,14 +227,6 @@ async def getPromptPreFetchResponse(body):
 
         body_resp = ep.ProcessingResponse(request_body=body_mutation)
 
-=======
-        body["params"]["arguments"] = result.modified_payload.args
-        body_resp = ep.ProcessingResponse(
-            request_body=ep.BodyResponse(
-                response=ep.CommonResponse(body_mutation=ep.BodyMutation(body=json.dumps(body).encode("utf-8")))
-            )
-        )
->>>>>>> 3d96cab (:recycle: Use line limit 120)
     logger.info(f"****Prompt Pre-fetch Return body: {body_resp}")
     return body_resp
 
