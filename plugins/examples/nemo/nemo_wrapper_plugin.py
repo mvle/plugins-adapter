@@ -7,19 +7,21 @@ from mcpgateway.plugins.framework import (
     PluginConfig,
     PluginContext,
     ToolHookType,
-    ToolPreInvokePayload,
-    ToolPreInvokeResult,
     ToolPostInvokePayload,
     ToolPostInvokeResult,
+    ToolPreInvokePayload,
+    ToolPreInvokeResult,
 )
 from nemoguardrails import LLMRails, RailsConfig
 
 logger = logging.getLogger(__name__)
 
-# NOTE: Ideally a plugin writer does not need to know what (MCP) primitive that the plugin has to run on
-# This uses the Context Forge plugin interface to inform how much effort it would be to adapt
-# nemo guardrails functionality and leverage this as a plugin server to be leveraged by the ext-proc
-# plugin adapter - currently as an internal plugin. The log levels are also particularly high for development currently
+# NOTE: Ideally a plugin writer does not need to know what (MCP) primitive
+# that the plugin has to run on. This uses the Context Forge plugin interface
+# to inform how much effort it would be to adapt nemo guardrails functionality
+# and leverage this as a plugin server to be leveraged by the ext-proc plugin
+# adapter - currently as an internal plugin. The log levels are also
+# particularly high for development currently.
 
 
 class NemoWrapperPlugin(Plugin):
@@ -31,7 +33,8 @@ class NemoWrapperPlugin(Plugin):
         """
         super().__init__(config)
         logger.info(
-            f"[NemoWrapperPlugin] Initializing plugin with config: {config.config}"
+            "[NemoWrapperPlugin] Initializing plugin with config: "
+            f"{config.config}"
         )
         # NOTE: very hardcoded
         nemo_config = RailsConfig.from_path(
@@ -52,9 +55,11 @@ class NemoWrapperPlugin(Plugin):
             context: Contextual information about the hook call.
 
         Returns:
-            The result of the plugin's analysis, including whether the tool can proceed.
+            The result of the plugin's analysis, including whether the
+            tool can proceed.
         """
-        # Very simple PII detection - attempt to block if any PII and does not alter the payload itself
+        # Very simple PII detection - attempt to block if any PII and
+        # does not alter the payload itself
         rails_response = None
         payload_args = payload.args
         if payload_args:
@@ -62,7 +67,8 @@ class NemoWrapperPlugin(Plugin):
                 rails_response = await self._rails.generate_async(
                     messages=[{"role": "user", "content": payload_args}]
                 )
-            except asyncio.CancelledError:  # asyncio.exceptions.CancelledError is thrown by nemo, need to catch
+            # asyncio.exceptions.CancelledError is thrown by nemo
+            except asyncio.CancelledError:
                 logging.exception(
                     "An error occurred in the nemo plugin except block:"
                 )
@@ -90,7 +96,8 @@ class NemoWrapperPlugin(Plugin):
             payload: The tool result payload to be analyzed.
             context: Contextual information about the hook call.
         Returns:
-            The result of the plugin's analysis, including whether the tool result should proceed.
+            The result of the plugin's analysis, including whether the
+            tool result should proceed.
         """
         return ToolPostInvokeResult(modified_payload=payload)
 

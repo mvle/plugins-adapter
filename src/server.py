@@ -1,15 +1,16 @@
 # Standard
 import asyncio
-import logging
-from typing import AsyncIterator
 import json
+import logging
 import os
+from typing import AsyncIterator
+
 import grpc
 
 # Third-Party
+from envoy.config.core.v3 import base_pb2 as core
 from envoy.service.ext_proc.v3 import external_processor_pb2 as ep
 from envoy.service.ext_proc.v3 import external_processor_pb2_grpc as ep_grpc
-from envoy.config.core.v3 import base_pb2 as core
 from envoy.type.v3 import http_status_pb2 as http_status_pb2
 
 # First-Party
@@ -162,12 +163,13 @@ async def getToolPostInvokeResponse(body):
     """
     Handle tool post-invoke hook processing.
 
-    Invokes plugins after a tool has been called, allowing for result validation,
-    modification, or filtering of the tool output.
+    Invokes plugins after a tool has been called, allowing for result
+    validation, modification, or filtering of the tool output.
 
-    Note: In STREAMED mode, blocking responses may fail if headers are already sent.
-    This implementation uses immediate_response to attempt early termination, but
-    it may not always succeed due to streaming constraints.
+    Note: In STREAMED mode, blocking responses may fail if headers are
+    already sent. This implementation uses immediate_response to attempt
+    early termination, but it may not always succeed due to streaming
+    constraints.
     """
     # FIXME: size of content array is expected to be 1
     # for content in body["result"]["content"]:
@@ -182,8 +184,9 @@ async def getToolPostInvokeResponse(body):
     )
     logger.debug(f"**** Tool Post Invoke result {result}")
     if not result.continue_processing:
-        # In STREAMED mode, we attempt to use immediate_response to terminate early
-        # This may fail if response headers have already been sent
+        # In STREAMED mode, we attempt to use immediate_response to
+        # terminate early. This may fail if response headers have already
+        # been sent.
         body_resp = create_mcp_immediate_error_response(
             body,
             error_message="Tool response forbidden",
@@ -214,8 +217,8 @@ async def getPromptPreFetchResponse(body):
     """
     Handle prompt pre-fetch hook processing.
 
-    Invokes plugins before a prompt is fetched, allowing for argument validation,
-    modification, or blocking of the prompt request.
+    Invokes plugins before a prompt is fetched, allowing for argument
+    validation, modification, or blocking of the prompt request.
     """
     prompt = PromptPrehookPayload(
         prompt_id=body["params"]["name"], args=body["params"]["arguments"]
@@ -255,8 +258,8 @@ async def getPromptPreFetchResponse(body):
 async def process_response_body_buffer(buffer: bytearray):
     """Process buffered response body content.
 
-    Parses the buffered content (supporting both SSE and plain JSON-RPC formats),
-    and invokes the tool post-invoke hook if it's a tool result.
+    Parses the buffered content (supporting both SSE and plain JSON-RPC
+    formats), and invokes the tool post-invoke hook if it's a tool result.
 
     Args:
         buffer: The accumulated response body bytes
@@ -447,10 +450,12 @@ class ExtProcServicer(ep_grpc.ExternalProcessorServicer):
                     resp_body_buf.extend(chunk)
                     logger.debug(f"Buffered chunk ({len(chunk)} bytes)")
 
-                # Check for end of stream (regardless of whether this chunk has content)
+                # Check for end of stream (regardless of whether this
+                # chunk has content)
                 if getattr(request.response_body, "end_of_stream", False):
                     logger.debug(
-                        "End of stream reached, processing complete buffered response"
+                        "End of stream reached, processing complete "
+                        "buffered response"
                     )
 
                     # Process the buffered content
@@ -462,7 +467,8 @@ class ExtProcServicer(ep_grpc.ExternalProcessorServicer):
                 else:
                     # Intermediate chunk - acknowledge but don't process yet
                     logger.debug(
-                        "Buffering intermediate chunk, waiting for end_of_stream"
+                        "Buffering intermediate chunk, "
+                        "waiting for end_of_stream"
                     )
                     yield ep.ProcessingResponse(
                         response_body=ep.BodyResponse(

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pip install -r requirements-proto.txt
+uv sync --group proto
 cd ..
 git clone git@github.com:cetanu/envoy_data_plane.git
 cd envoy_data_plane

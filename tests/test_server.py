@@ -4,18 +4,18 @@ These tests use dynamic import and mocking to avoid proto dependencies.
 """
 
 # Standard
-from unittest.mock import AsyncMock, Mock, MagicMock
-import sys
 import json
+import sys
+from unittest.mock import AsyncMock, MagicMock, Mock
 
 # Third-Party
 import pytest
 
 # First-Party
 from cpex.framework import (
-    ToolPostInvokeResult,
-    ToolPostInvokePayload,
     PluginViolation,
+    ToolPostInvokePayload,
+    ToolPostInvokeResult,
 )
 
 
@@ -111,7 +111,7 @@ def verify_payload_content(payload, expected_result, expected_text):
 async def test_getToolPostInvokeResponse_continue_processing(
     mock_envoy_modules, mock_manager, sample_tool_result_body
 ):
-    """Test getToolPostInvokeResponse when plugin allows processing to continue."""
+    """Test getToolPostInvokeResponse when plugin allows processing."""
     # Setup mock response objects
     mock_response = MagicMock()
     mock_response.HasField.return_value = True
@@ -383,7 +383,8 @@ async def test_process_response_body_buffer_multiple_chunks_scenario(
 ):
     """Test buffering: content in chunks, then empty end_of_stream chunk.
 
-    Simulates: chunk1 (content) + chunk2 (content) + chunk3 (empty, end_of_stream).
+    Simulates: chunk1 (content) + chunk2 (content) + chunk3 (empty,
+    end_of_stream).
     """
     setup_response_mocks(mock_envoy_modules)
     import src.server
@@ -436,7 +437,7 @@ async def test_process_response_body_buffer_empty(
 async def test_process_response_body_buffer_non_tool_result(
     mock_envoy_modules, mock_manager
 ):
-    """Test process_response_body_buffer with non-tool result (error response)."""
+    """Test process_response_body_buffer with non-tool result."""
     setup_response_mocks(mock_envoy_modules)
     import src.server
 

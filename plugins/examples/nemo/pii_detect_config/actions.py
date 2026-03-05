@@ -1,5 +1,6 @@
 import logging
 import re
+
 from nemoguardrails.actions import action
 
 EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")

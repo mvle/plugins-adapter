@@ -9,16 +9,17 @@ An Envoy external processor (ext-proc) for configuring and invoking guardrails i
 
 ## Full Dev Build
 
-1. **Build Protocol Buffers**
+1. **Install uv** (if not already installed): https://docs.astral.sh/uv/getting-started/installation/
+
+2. **Install dependencies and build Protocol Buffers**
    ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate
+   uv sync --group proto
    ./proto-build.sh
    ```
 
-2. **Verify** `src/` contains: `/envoy`, `/validate`, `/xds`, `/udpa`
+3. **Verify** `src/` contains: `/envoy`, `/validate`, `/xds`, `/udpa`
 
-3. **Deploy to kind cluster**
+4. **Deploy to kind cluster**
    ```bash
    make all PLUGIN_DEPS=nemocheck #replace nemocheck with comma seperated list of plugins to include other plugins
    ```

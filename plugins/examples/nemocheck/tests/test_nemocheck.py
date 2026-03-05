@@ -8,9 +8,9 @@ import pytest
 
 # First-Party
 from cpex.framework import (
+    GlobalContext,
     PluginConfig,
     PluginContext,
-    GlobalContext,
     PromptPrehookPayload,
     ToolPostInvokePayload,
     ToolPreInvokePayload,
@@ -150,7 +150,8 @@ async def test_tool_pre_invoke_scenarios(
     expected_code,
     expected_mcp_code,
 ):
-    """Test tool_pre_invoke with various scenarios including error codes and MCP error codes."""
+    """Test tool_pre_invoke with various scenarios including error codes
+    and MCP error codes."""
     payload = ToolPreInvokePayload(
         name="test_tool",
         args={"tool_args": '{"param": "value"}'},
@@ -210,7 +211,8 @@ async def test_tool_post_invoke_http_scenarios(
     expected_code,
     expected_mcp_code,
 ):
-    """Test tool_post_invoke with various HTTP response scenarios including error codes and MCP error codes."""
+    """Test tool_post_invoke with various HTTP response scenarios
+    including error codes and MCP error codes."""
     payload = ToolPostInvokePayload(
         name="test_tool",
         result={"content": [{"type": "text", "text": "Test content"}]},
@@ -321,7 +323,8 @@ async def test_tool_post_invoke_filters_non_text(plugin, context):
 async def test_connection_error_handling(
     plugin, context, hook_name, payload_factory
 ):
-    """Test both hooks fail closed on connection errors with NEMO_CONNECTION_ERROR code."""
+    """Test both hooks fail closed on connection errors with
+    NEMO_CONNECTION_ERROR code."""
     payload = payload_factory()
     hook = getattr(plugin, hook_name)
 
@@ -358,7 +361,8 @@ async def test_connection_error_handling(
 async def test_violation_includes_rail_names(
     plugin, context, hook_name, payload_factory, expected_reason_prefix
 ):
-    """Test that violation descriptions include the rail names from rails_status."""
+    """Test that violation descriptions include the rail names from
+    rails_status."""
     payload = payload_factory()
     hook = getattr(plugin, hook_name)
 

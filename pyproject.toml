@@ -1,0 +1,55 @@
+[project]
+name = "plugins-adapter"
+version = "0.1.0"
+description = "Envoy ext-proc for configuring and invoking guardrails in an Envoy-based gateway"
+requires-python = ">=3.11"
+dependencies = [
+    "grpcio>=1.76.0",
+    "grpcio-tools>=1.76.0",
+    "betterproto2==0.9.1",
+    "mcp-contextforge-gateway==0.9.0",
+]
+
+[dependency-groups]
+proto = [
+    "requests==2.32.5",
+    "grpcio>=1.76.0",
+    "grpcio-tools>=1.76.0",
+    "betterproto2==0.9.1",
+    "betterproto2_compiler==0.9.0",
+    "structlog==25.5.0",
+]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "ruff>=0.9.0",
+]
+
+[tool.ruff]
+line-length = 80
+target-version = "py311"
+exclude = [
+    ".venv",
+    "src/envoy",
+    "src/udpa",
+    "src/validate",
+    "src/xds",
+    "contextforge-plugins-python",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+
+[tool.pytest.ini_options]
+log_cli = false
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(module)s] [%(levelname)s] %(message)s"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+log_level = "INFO"
+log_format = "%(asctime)s [%(module)s] [%(levelname)s] %(message)s"
+log_date_format = "%Y-%m-%d %H:%M:%S"
+testpaths = ["tests"]
+pythonpath = [".", "src"]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]

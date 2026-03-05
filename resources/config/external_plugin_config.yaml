@@ -2,7 +2,7 @@
 plugins:
   - name: CfDLGuard
     kind: external
-    hooks: ["tool_pre_invoke", "tool_post_invoke"]    
+    hooks: ["tool_pre_invoke", "tool_post_invoke"]
     mode: enforce
     mcp:
       proto: STREAMABLEHTTP

@@ -21,7 +21,7 @@ If you prefer not to use `proto-build.sh`:
    See [instructions if needed](https://betterproto.github.io/python-betterproto2/getting-started/).
 
    ```sh
-   pip install -r requirements-proto.txt
+   uv sync --group proto
    ```
 
 2. **Build Envoy protobufs**
@@ -51,6 +51,6 @@ If you prefer not to use `proto-build.sh`:
 Ensure by this point you have the `envoy`, `validate`, `xds`, `udpa` python protobuf folders in `src/` to run the external processor server (`server.py`).
 
    ```sh
-   pip install -r requirements.txt
-   python src/server.py
+   uv sync
+   uv run python src/server.py
    ```

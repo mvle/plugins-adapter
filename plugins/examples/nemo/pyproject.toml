@@ -1,0 +1,7 @@
+[project]
+name = "nemo-plugin"
+version = "1.0.0"
+requires-python = ">=3.11"
+dependencies = [
+    "nemoguardrails==0.19.0",
+]

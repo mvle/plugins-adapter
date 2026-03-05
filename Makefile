@@ -1,4 +1,4 @@
-.PHONY: build load all deploy exec log
+.PHONY: build load all deploy exec log lint
 .IGNORE: delete
 
 
@@ -26,7 +26,7 @@ else
   IMAGE_PUSH := $(IMAGE_BASE):$(IMAGE_TAG)
 endif
 
-# Build the combined broker and router 
+# Build the combined broker and router
 build:
 	$(CONTAINER_RUNTIME) build -t $(IMAGE_LOCAL) . --build-arg PLUGIN_DEPS=${PLUGIN_DEPS}
 
@@ -49,14 +49,13 @@ deploy:
 	kubectl apply -f filter.yaml
 
 lint:
-	uv run ruff check --fix
-	uv run ruff format
+	pre-commit run --all-files
 
 redeploy: delete deploy
 
 push_image_quay: build
-	$(CONTAINER_RUNTIME) tag $(IMAGE_LOCAL)  quay.io/julian_stephen/$(IMAGE_PUSH) 
-	$(CONTAINER_RUNTIME) push quay.io/julian_stephen/$(IMAGE_PUSH) 
+	$(CONTAINER_RUNTIME) tag $(IMAGE_LOCAL)  quay.io/julian_stephen/$(IMAGE_PUSH)
+	$(CONTAINER_RUNTIME) push quay.io/julian_stephen/$(IMAGE_PUSH)
 
 all: build load redeploy
 	@echo "All done!"
@@ -65,7 +64,7 @@ port-forward-nemo:
 	kubectl port-forward -n istio-system service/nemo-guardrails-service 8000:8000
 
 deploy_quay: IMAGE=quay.io/julian_stephen/$(IMAGE_PUSH)
-deploy_quay: 
+deploy_quay:
 	$(CONTAINER_RUNTIME) pull $(IMAGE)
 	$(CONTAINER_RUNTIME) tag $(IMAGE) $(IMAGE_LOCAL)
 	kind load docker-image $(IMAGE_LOCAL) --name mcp-gateway
