@@ -21,7 +21,8 @@ An Envoy external processor (ext-proc) for configuring and invoking guardrails i
 
 4. **Deploy to kind cluster**
    ```bash
-   make all PLUGIN_DEPS=nemocheck #replace nemocheck with comma seperated list of plugins to include other plugins
+   # Replace nemocheck with a comma-separated list of plugins to include other plugins
+   make all PLUGIN_DEPS=nemocheck
    ```
 
 See [detailed build instructions](./docs/build.md) for manual build steps.

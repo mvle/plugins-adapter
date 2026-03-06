@@ -34,7 +34,6 @@ exclude = [
     "src/udpa",
     "src/validate",
     "src/xds",
-    "contextforge-plugins-python",
 ]
 
 [tool.ruff.lint]
